@@ -23,12 +23,12 @@ function Login() {
 
   return (
     <div
-      className="h-100"
+      className="h-100 relative"
       style={{
         background: `repeating-linear-gradient(to left top, ${COLORS.primary} 0em,${COLORS.secondary} 95vh)`,
       }}
     >
-      <form className={`p-4 rounded bg-dark h-100`} onSubmit={handleSubmit}>
+      <form className="p-4 p-md-5 rounded bg-dark h-100" onSubmit={handleSubmit}>
         {/* form heading */}
         <div className="text-white my-5">
           <h1>

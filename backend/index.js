@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { connectDb } from "./db/connectDb.js";
+import userRoutes from "./routes/userRoutes.js";
 
 //configuration
 dotenv.config();
@@ -13,6 +14,9 @@ app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use(express.json());
 
 //route middlewares
+
+app.use("/api/v1/user", userRoutes);
+
 app.use("/*", (req, res) => {
   res.status(404).json({ message: "Not Found" });
 });

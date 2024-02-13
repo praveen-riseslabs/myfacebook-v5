@@ -6,8 +6,12 @@ import { Link } from "react-router-dom";
 
 function Registration() {
   const [userData, setUserData] = useState({
-    usernameOrEmail: "",
+    fullname: "",
+    username: "",
+    email: "",
+    phoneNumber: "",
     password: "",
+    confirmPassword: "",
   });
 
   const navigate = useNavigate();
@@ -28,10 +32,13 @@ function Registration() {
         background: `repeating-linear-gradient(to left top, ${COLORS.primary} 0em,${COLORS.secondary} 95vh)`,
       }}
     >
-      <form className={`p-2 rounded bg-dark h-100`} onSubmit={handleSubmit}>
+      <form
+        className="p-2 rounded position-relative bg-dark h-100"
+        onSubmit={handleSubmit}
+      >
         {/* form heading */}
-        <div className="text-white mt-5 mb-3">
-          <h1 >
+        <div className="text-white mt-5 mb-3 ms-md-5 ms-0">
+          <h1>
             <span
               style={{
                 borderBottom: "3px solid",
@@ -56,7 +63,7 @@ function Registration() {
                 name="fullname"
                 className="form-control p-2 shadow-none"
                 placeholder="Fullname"
-                value={userData.usernameOrEmail}
+                value={userData.fullname}
                 onChange={handleChange}
               />
             </div>
@@ -67,7 +74,7 @@ function Registration() {
                 name="username"
                 className="form-control p-2 shadow-none"
                 placeholder="Username"
-                value={userData.usernameOrEmail}
+                value={userData.username}
                 onChange={handleChange}
               />
             </div>
@@ -80,7 +87,7 @@ function Registration() {
                 name="email"
                 className="form-control p-2 shadow-none"
                 placeholder="Email"
-                value={userData.usernameOrEmail}
+                value={userData.email}
                 onChange={handleChange}
               />
             </div>
@@ -91,7 +98,7 @@ function Registration() {
                 name="phoneNumber"
                 className="form-control p-2 shadow-none"
                 placeholder="Phone Number"
-                value={userData.usernameOrEmail}
+                value={userData.phoneNumber}
                 onChange={handleChange}
               />
             </div>
@@ -104,7 +111,7 @@ function Registration() {
                 name="password"
                 className="form-control p-2 shadow-none"
                 placeholder="Password"
-                value={userData.usernameOrEmail}
+                value={userData.password}
                 onChange={handleChange}
               />
             </div>
@@ -115,7 +122,7 @@ function Registration() {
                 name="confirmPassword"
                 className="form-control p-2 shadow-none"
                 placeholder="Confirm Password"
-                value={userData.usernameOrEmail}
+                value={userData.confirmPassword}
                 onChange={handleChange}
               />
             </div>

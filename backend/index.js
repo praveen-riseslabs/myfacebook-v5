@@ -14,7 +14,9 @@ app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use(express.json());
 
 //route middlewares
+
 app.use("/api/v1/user", userRoutes);
+
 app.use("/*", (req, res) => {
   res.status(404).json({ message: "Not Found" });
 });

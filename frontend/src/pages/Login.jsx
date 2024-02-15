@@ -79,7 +79,7 @@ const Login = () => {
           </div>
 
           <div className="d-flex flex-column justify-content-center align-items-center gap-1 mt-3">
-            <Link to="/forgot_pass" className="text-decoration-none">
+            <Link to="/forgot-password" className="text-decoration-none">
               Forgot Password
             </Link>
             <span className="d-flex gap-2">

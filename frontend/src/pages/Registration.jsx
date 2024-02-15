@@ -38,7 +38,7 @@ function Registration() {
       reset();
     }
   };
-  console.log(errors);
+  
   //navigating after user successfully registered
   useEffect(() => {
     if (Object.keys(user).length === 0 && !loggedIn) return;

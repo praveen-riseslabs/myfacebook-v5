@@ -3,6 +3,9 @@ import {
   getUserDetails,
   loginUser,
   registerUser,
+  resetPassword,
+  sendPasswordResetOtp,
+  verifyPasswordResetOtp,
 } from "../thunks/userThunk";
 
 const userSlice = createSlice({
@@ -10,6 +13,7 @@ const userSlice = createSlice({
   initialState: {
     user: {},
     loggedIn: false,
+    resetPassword: {}
   },
   reducers: {
     //user logout
@@ -35,6 +39,21 @@ const userSlice = createSlice({
     builder.addCase(getUserDetails.fulfilled, (state, action) => {
       state.user = action.payload;
       state.loggedIn = true;
+    });
+
+    //case : send password reset request
+    builder.addCase(sendPasswordResetOtp.fulfilled, (state, action) => {
+      state.resetPassword = action.payload;
+    });
+
+    //case : verifying password reset otp
+    builder.addCase(verifyPasswordResetOtp.fulfilled, (state, action) => {
+      state.resetPassword = action.payload;
+    });
+
+    // : reset password
+    builder.addCase(resetPassword.fulfilled, (state, action) => {
+      state.resetPassword = action.payload;
     });
   },
 });

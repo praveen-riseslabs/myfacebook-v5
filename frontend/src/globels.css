@@ -1,0 +1,38 @@
+:root {
+  --primary-bg-color: #f36e6e;
+  --secondary-bg-color: #f0a8a8;
+  --white-bg-color: #fbfbfb;
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+#root::-webkit-scrollbar {
+  width: 0;
+}
+
+.cbg-primary {
+  background-color: var(--primary-bg-color);
+}
+.ctext-primary {
+  color: var(--primary-bg-color);
+}
+
+.cbg-secondary {
+  background-color: var(--secondary-bg-color);
+}
+.ctext-secondary {
+  color: var(--secondary-bg-color);
+}
+
+.cbg-white {
+  background-color: var(--white-bg-color);
+}
+.ctext-white {
+  color: var(--white-bg-color);
+}

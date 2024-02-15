@@ -1,17 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../store";
 import { useThunk } from "../hooks/useThunk";
 import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { VALIDATE } from "../utils/formValidations";
 
 function Registration() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const {
+    register,
+    reset,
+    formState: { errors, isSubmitSuccessful },
+    handleSubmit,
+    getValues
+  } = useForm({ mode: "all" });
 
-  const [doRegisterUser, loadingUserRegister, errorUserRegister] =
-    useThunk(registerUser);
+  const [
+    doRegisterUser,
+    loadingUserRegister,
+    errorUserRegister,
+    resetRegistrationUserErrors,
+  ] = useThunk(registerUser);
 
   let navigate = useNavigate();
 
@@ -19,18 +28,17 @@ function Registration() {
   const { user, loggedIn } = useSelector((state) => state.user);
 
   //handling registration
-  const handleRegistration = (e) => {
+  const onSubmit = (data,e) => {
     e.preventDefault();
-    if (password !== confirmPassword) return;
 
-    const userData = { username, email, password, confirmPassword };
-    doRegisterUser(userData);
+    resetRegistrationUserErrors();
+    doRegisterUser(data);
 
-    // if (isSubmitSuccessful) {
-    //   reset();
-    // }
+    if (isSubmitSuccessful) {
+      reset();
+    }
   };
-
+  console.log(errors);
   //navigating after user successfully registered
   useEffect(() => {
     if (Object.keys(user).length === 0 && !loggedIn) return;
@@ -46,46 +54,53 @@ function Registration() {
         }}
       >
         <h2 className="">Registration</h2>
-        <form onSubmit={handleRegistration}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* username */}
           <div>
             <label className="form-label">Username</label>
             <input
               type="username"
               className="form-control"
               placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              {...register("username", VALIDATE().username)}
             />
+            <div className="text-error">{errors.username?.message}</div>
           </div>
+
+          {/* email */}
           <div>
             <label className="form-label">Email</label>
             <input
               type="email"
               className="form-control"
               placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              {...register("email", VALIDATE().email)}
             />
+            <div className="text-error">{errors.email?.message}</div>
           </div>
+
+          {/* password */}
           <div>
             <label className="form-label">Password</label>
             <input
               type="password"
               className="form-control"
               placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              {...register("password", VALIDATE().password)}
             />
+            <div className="text-error">{errors.password?.message}</div>
           </div>
+
+          {/* confirmPassword */}
           <div>
             <label className="form-label">Confirm Password</label>
             <input
               type="password"
               className="form-control"
               placeholder="Enter confirm password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              {...register("confirmPassword", VALIDATE(getValues).confirmPassword)}
             />
+            <div className="text-error">{errors.confirmPassword?.message}</div>
           </div>
 
           {/* server side error handling */}

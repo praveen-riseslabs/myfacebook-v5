@@ -36,3 +36,9 @@
 .ctext-white {
   color: var(--white-bg-color);
 }
+
+.text-error {
+  color: red;
+  font-size: 0.7rem;
+  margin-top: 0.2rem;
+}

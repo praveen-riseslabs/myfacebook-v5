@@ -5,17 +5,21 @@ import { useThunk } from "../hooks/useThunk";
 import { useSelector } from "react-redux";
 
 const Login = () => {
-  const [usernameOrEmail, setEmail] = useState("");
+  const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
 
   //extracting user state from store
   const { user, loggedIn } = useSelector((state) => state.user);
 
-  const [doLoginUser, loadingUserLogin, errorUserLogin] = useThunk(loginUser);
+  const [doLoginUser, loadingUserLogin, errorUserLogin, resetLoginUserErrors] = useThunk(loginUser);
   let navigate = useNavigate();
 
+  //handling login
   const handleLogin = (e) => {
     e.preventDefault();
+    resetLoginUserErrors()
+    setUsernameOrEmail("")
+    setPassword("")
     const data = { usernameOrEmail, password };
     doLoginUser(data);
   };
@@ -42,7 +46,7 @@ const Login = () => {
               className="form-control"
               placeholder="Enter username or email"
               value={usernameOrEmail}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setUsernameOrEmail(e.target.value)}
             />
           </div>
 

@@ -1,155 +1,120 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { COLORS } from "../constants";
-import { Divider } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../store";
+import { useThunk } from "../hooks/useThunk";
+import { useSelector } from "react-redux";
 
 function Registration() {
-  const [userData, setUserData] = useState({
-    usernameOrEmail: "",
-    password: "",
-  });
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const navigate = useNavigate();
+  const [doRegisterUser, loadingUserRegister, errorUserRegister] =
+    useThunk(registerUser);
 
-  const handleSubmit = (e) => {
+  let navigate = useNavigate();
+
+  //extracting user state from store
+  const { user, loggedIn } = useSelector((state) => state.user);
+
+  //handling registration
+  const handleRegistration = (e) => {
     e.preventDefault();
-    console.log(userData);
+    if (password !== confirmPassword) return;
+
+    const userData = { username, email, password, confirmPassword };
+    doRegisterUser(userData);
+
+    // if (isSubmitSuccessful) {
+    //   reset();
+    // }
   };
 
-  const handleChange = (e) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
-  };
+  //navigating after user successfully registered
+  useEffect(() => {
+    if (Object.keys(user).length === 0 && !loggedIn) return;
+    navigate("/", { replace: true });
+  }, [loggedIn, navigate, user]);
 
   return (
-    <div
-      className="h-100"
-      style={{
-        background: `repeating-linear-gradient(to left top, ${COLORS.primary} 0em,${COLORS.secondary} 95vh)`,
-      }}
-    >
-      <form className={`p-2 rounded bg-dark h-100`} onSubmit={handleSubmit}>
-        {/* form heading */}
-        <div className="text-white mt-5 mb-3">
-          <h1 >
-            <span
-              style={{
-                borderBottom: "3px solid",
-                borderImage: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.secondary}) 1`,
-              }}
-            >
-              Reg
+    <div className="d-flex justify-content-center h-100 cbg-secondary container-fluid">
+      <div
+        className="cbg-white p-4 col-sm-8 col-md-6 col-lg-4 col-10 position-absolute translate-middle start-50 top-50 rounded-4"
+        style={{
+          boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <h2 className="">Registration</h2>
+        <form onSubmit={handleRegistration}>
+          <div>
+            <label className="form-label">Username</label>
+            <input
+              type="username"
+              className="form-control"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="form-label">Email</label>
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="form-label">Password</label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="form-label">Confirm Password</label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Enter confirm password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
+
+          {/* server side error handling */}
+          <div className="text-danger mt-3">
+            {errorUserRegister && `* ${errorUserRegister}`}
+          </div>
+
+          <div className="d-flex justify-content-center mt-4 px-5">
+            {loadingUserRegister ? (
+              <div className="spinner-border ctext-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              <button className="btn btn-primary" type="submit">
+                Register
+              </button>
+            )}
+          </div>
+
+          <div className="d-flex justify-content-center mt-3">
+            <span className="d-flex gap-2">
+              Already have an Account?
+              <Link to="/login" className="text-decoration-none">
+                Login
+              </Link>
             </span>
-            istration
-          </h1>
-          <small className="text-secondary">
-            <em>Create your new account</em>
-          </small>
-        </div>
-        {/* user details */}
-        <div className="d-flex flex-column gap-2 container">
-          <div className="row">
-            <div className="col-6">
-              <label className="form-label text-white">Fullname</label>
-              <input
-                type="text"
-                name="fullname"
-                className="form-control p-2 shadow-none"
-                placeholder="Fullname"
-                value={userData.usernameOrEmail}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="col-6">
-              <label className="form-label text-white">Username</label>
-              <input
-                type="text"
-                name="username"
-                className="form-control p-2 shadow-none"
-                placeholder="Username"
-                value={userData.usernameOrEmail}
-                onChange={handleChange}
-              />
-            </div>
           </div>
-          <div className="row">
-            <div className="col">
-              <label className="form-label text-white">Email</label>
-              <input
-                type="text"
-                name="email"
-                className="form-control p-2 shadow-none"
-                placeholder="Email"
-                value={userData.usernameOrEmail}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="col">
-              <label className="form-label text-white">Phone Number</label>
-              <input
-                type="text"
-                name="phoneNumber"
-                className="form-control p-2 shadow-none"
-                placeholder="Phone Number"
-                value={userData.usernameOrEmail}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col">
-              <label className="form-label text-white">Password</label>
-              <input
-                type="text"
-                name="password"
-                className="form-control p-2 shadow-none"
-                placeholder="Password"
-                value={userData.usernameOrEmail}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="col">
-              <label className="form-label text-white">Confirm Password</label>
-              <input
-                type="text"
-                name="confirmPassword"
-                className="form-control p-2 shadow-none"
-                placeholder="Confirm Password"
-                value={userData.usernameOrEmail}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* actions */}
-        <div className="d-grid mt-5 d-flex justify-content-center">
-          <button
-            className="btn btn-primary w-50 p-2"
-            type="submit"
-            style={{
-              background: `linear-gradient(to right, ${COLORS.primary},${COLORS.secondary})`,
-            }}
-          >
-            Register
-          </button>
-        </div>
-
-        {/* divider */}
-        <Divider
-          sx={{ marginBlock: "3rem", backgroundColor: "gray" }}
-        ></Divider>
-
-        {/* alt navigation */}
-        <div className="text-center">
-          <div className="text-white">
-            Already have an Account?{" "}
-            <Link to="/login" className="text-decoration-none">
-              Login
-            </Link>
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

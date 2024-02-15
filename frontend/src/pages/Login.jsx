@@ -1,108 +1,94 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { COLORS } from "../constants";
-import {Divider} from "@mui/material"
-import {Link} from "react-router-dom"
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../store";
+import { useThunk } from "../hooks/useThunk";
+import { useSelector } from "react-redux";
 
-function Login() {
-  const [userData, setUserData] = useState({
-    usernameOrEmail: "",
-    password: "",
-  });
+const Login = () => {
+  const [usernameOrEmail, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const navigate = useNavigate();
+  //extracting user state from store
+  const { user, loggedIn } = useSelector((state) => state.user);
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(userData);
+  const [doLoginUser, loadingUserLogin, errorUserLogin] = useThunk(loginUser);
+  let navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const data = { usernameOrEmail, password };
+    doLoginUser(data);
   };
 
-  const handleChange = (e) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
-  };
+  //navigating after user successfully registered
+  useEffect(() => {
+    if (Object.keys(user).length === 0 && !loggedIn) return;
+    navigate("/", { replace: true });
+  }, [loggedIn, navigate, user]);
 
   return (
-    <div
-      className="h-100"
-      style={{
-        background: `repeating-linear-gradient(to left top, ${COLORS.primary} 0em,${COLORS.secondary} 95vh)`,
-      }}
-    >
-      <form className={`p-4 rounded bg-dark h-100`} onSubmit={handleSubmit}>
-        {/* form heading */}
-        <div className="text-white my-5">
-          <h1>
-            <span
-              style={{
-                borderBottom: "3px solid",
-                borderImage: `linear-gradient(to right, ${COLORS.primary}, ${COLORS.secondary}) 1`,
-              }}
-            >
-              Lo
-            </span>
-            gin
-          </h1>
-          <small className="text-secondary"><em>Please login to continue to our site</em></small>
-        </div>
-        {/* user details */}
-        <div className="d-flex flex-column gap-3 mt-4">
+    <div className="d-flex justify-content-center h-100 cbg-secondary container-fluid">
+      <div
+        className="cbg-white p-4 col-sm-8 col-md-6 col-lg-4 col-10 position-absolute translate-middle start-50 top-50 rounded-4"
+        style={{
+          boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <h2 className="">Login</h2>
+        <form onSubmit={handleLogin}>
           <div>
-            <label className="form-label text-white">Username or Email</label>
+            <label className="form-label">Username or Email</label>
             <input
-              type="text"
-              name="usernameOrEmail"
-              className="form-control p-3 shadow-none"
-              placeholder="Username or Email"
-              value={userData.usernameOrEmail}
-              onChange={handleChange}
+              className="form-control"
+              placeholder="Enter username or email"
+              value={usernameOrEmail}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
+
           <div>
-            <label className="form-label text-white">Password</label>
+            <label className="form-label">Password</label>
             <input
               type="password"
-              name="password"
-              className="form-control p-3 shadow-none"
-              placeholder="Password"
-              value={userData.password}
-              onChange={handleChange}
+              className="form-control"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-        </div>
 
-        {/* actions */}
-        <div className="d-grid mt-5 d-flex justify-content-center">
-          <button
-            className="btn btn-primary w-50 p-2"
-            type="submit"
-            style={{
-              background: `linear-gradient(to right, ${COLORS.primary},${COLORS.secondary})`,
-            }}
-          >
-            Login
-          </button>
-        </div>
-
-        {/* divider */}
-        <Divider
-          sx={{ marginBlock: "3rem", backgroundColor: "gray" }}
-        ></Divider>
-        
-        {/* alt navigation */}
-        <div className="text-center">
-          <Link to="/forgotpassword" className="text-decoration-none">
-            Forget password
-          </Link>
-          <div className="text-white">
-            Don't have an Account?{" "}
-            <Link to="/register" className="text-decoration-none">
-              Register
-            </Link>
+          {/* server side error handling */}
+          <div className="text-danger mt-3">
+            {errorUserLogin && `* ${errorUserLogin}`}
           </div>
-        </div>
-      </form>
+
+          <div className="d-flex justify-content-center mt-4 px-5">
+            {loadingUserLogin ? (
+              <div className="spinner-border ctext-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              <button className="btn btn-primary" type="submit">
+                Login
+              </button>
+            )}
+          </div>
+
+          <div className="d-flex flex-column justify-content-center align-items-center gap-1 mt-3">
+            <Link to="/forgot_pass" className="text-decoration-none">
+              Forgot Password
+            </Link>
+            <span className="d-flex gap-2">
+              Don't have an Account?
+              <Link to="/register" className="text-decoration-none">
+                Register
+              </Link>
+            </span>
+          </div>
+        </form>
+      </div>
     </div>
   );
-}
+};
 
 export default Login;

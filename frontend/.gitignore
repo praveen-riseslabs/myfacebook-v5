@@ -23,7 +23,3 @@ dist-ssr
 *.sln
 *.sw?
 .env
-/backend/.env
-/src/pages/Login.old.jsx
-/src/pages/Registration.old.jsx
-../backend/controllers

@@ -4,6 +4,7 @@ import { mailTransporter, sendMail } from "../utils/mailTransporter.js";
 import { mailConfig } from "../utils/credentials.js";
 import crypto from "crypto";
 import { createJwtToken } from "../utils/createJwtToken.js";
+import { otpModel } from "../models/otpModel.js";
 
 class UserController {
   //user registration...........................................................................
@@ -141,19 +142,56 @@ class UserController {
   //getting user details.........................................................................
   static async getUserDetails(req, res) {
     try {
-      const { _id } = req.user;
+      const user = req.user;
 
-      if (!_id) {
+      if (!user) {
         throw new Error("User not found");
       }
-
-      const user = await userModel.findById(_id);
 
       res.status(200).json({
         username: user.username,
         email: user.email,
         userId: user._id,
       });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+
+  //reset password.........................................................................
+  static async resetPassword(req, res) {
+    try {
+      const { password, confirmPassword, userId, id } = req.body;
+
+      if (!id || !userId || !password || !confirmPassword) {
+        throw new Error("fields cannot be empty");
+      }
+
+      if (confirmPassword !== password) {
+        throw new Error("confirm password must match password");
+      }
+
+      const otp = await otpModel.findById(id);
+
+      if (!otp) {
+        throw new Error("something went wrong, please try again");
+      }
+
+      await otpModel.findByIdAndDelete(id);
+
+      const user = await userModel.findById(userId);
+
+      if (!user) {
+        throw new Error("Invalid request");
+      }
+
+      //encrypting password
+      const salt = await bcrypt.genSalt(Number(process.env.SALT_VALUE));
+      const hash = await bcrypt.hash(password, salt);
+
+      await userModel.findByIdAndUpdate(userId, { $set: { password: hash } });
+
+      res.status(200).json({ message: "success" });
     } catch (err) {
       res.status(400).json({ error: err.message });
     }

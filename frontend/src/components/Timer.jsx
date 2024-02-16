@@ -10,14 +10,6 @@ export default function Timer({
   const [isResendReqDisabled, setIsResendReqDisabled] = useState(false);
   const [showResetTimer, setShowResetTimer] = useState(10);
 
-   // show timer on resend button when it will enabled
-//    if (showResetTimer > 0) {
-//     setInterval(() => {
-//       setShowResetTimer((prev) => prev - 1);
-//       console.log(showResetTimer);
-//     }, 1000);
-//   }
-
   //handling timer restart
   const handleRestart = () => {
     setTime(initialTime);
@@ -32,13 +24,11 @@ export default function Timer({
       setIsResendReqDisabled(false);
     }, 10000);
 
-   
-
     if (onRestart !== null) {
       onRestart();
     }
   };
-
+  
   //decreamenting time on every second
   useEffect(() => {
     let intervalId;
@@ -85,7 +75,7 @@ export default function Timer({
           className="ms-2"
         >
           Resend OTP{" "}
-          {showResetTimer > 0 && showResetTimer < 10 ? showResetTimer : null}
+          {showResetTimer > 0 && showResetTimer < 10 && time.minutes === 9 ? showResetTimer : null}
         </Button>
       )}
     </>

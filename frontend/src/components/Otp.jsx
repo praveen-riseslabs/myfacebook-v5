@@ -1,7 +1,7 @@
 import { MuiOtpInput } from "mui-one-time-password-input";
 import Timer from "./Timer";
 import { useCallback, useEffect, useState } from "react";
-import { verifyPasswordResetOtp } from "../store";
+import { sendPasswordResetOtp, verifyPasswordResetOtp } from "../store";
 import { useThunk } from "../hooks/useThunk";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -20,6 +20,15 @@ export default function Otp({ email, closeModal }) {
     isVerifyOtpRan,
   ] = useThunk(verifyPasswordResetOtp);
   const navigate = useNavigate();
+
+  const [doSendOtp, loadingSentOtp, errorLoadingSentOtp] =
+    useThunk(sendPasswordResetOtp);
+
+  //handling resend otp
+  const handleResendOtp = () => {
+    if (!email) return;
+    doSendOtp(email);
+  };
 
   //handling cancel verification
   const handleCancel = () => {
@@ -66,7 +75,11 @@ export default function Otp({ email, closeModal }) {
       {/* expiration time */}
       <div className="mt-3">
         otp expires in :{" "}
-        <Timer initialTime={initialTime} onTimeExpired={setTimeExpired} onRestart={()=> console.log("restarted")}/>
+        <Timer
+          initialTime={initialTime}
+          onTimeExpired={setTimeExpired}
+          onRestart={handleResendOtp}
+        />
       </div>
 
       {/* errors */}
@@ -74,11 +87,17 @@ export default function Otp({ email, closeModal }) {
       <div className="text-error">
         {errorLoadingVerifyOtp && errorLoadingVerifyOtp}
       </div>
+      {/* resend otp*/}
+      <div className="text-error">
+        {errorLoadingSentOtp && errorLoadingSentOtp}
+      </div>
 
       {/* action buttons */}
-      {loadingVerifyOtp ? (
-        <div className="spinner-border ctext-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
+      {loadingVerifyOtp || loadingSentOtp ? (
+        <div className="d-flex justify-content-center">
+          <div className="spinner-border ctext-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
       ) : (
         <div className="mt-3 d-flex justify-content-around">
@@ -88,7 +107,7 @@ export default function Otp({ email, closeModal }) {
           <button
             className="btn btn-primary"
             onClick={handleVerifyOtp}
-            disabled={loadingVerifyOtp || timeExpired}
+            disabled={loadingVerifyOtp || timeExpired || loadingSentOtp}
           >
             verify
           </button>

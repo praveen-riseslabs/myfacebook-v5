@@ -1,24 +1,17 @@
-import { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { sendPasswordResetOtp, verifyPasswordResetOtp } from "../store";
-import { useThunk } from "../hooks/useThunk";
 import { MuiOtpInput } from "mui-one-time-password-input";
+import Timer from "./Timer";
+import { useCallback, useEffect, useState } from "react";
+import { verifyPasswordResetOtp } from "../store";
+import { useThunk } from "../hooks/useThunk";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const initialTime = { minutes: 10, seconds: 0 };
 
-
 export default function Otp({ email, closeModal }) {
   const [otp, setOtp] = useState("");
-  const [isResendReqDisabled, setIsResendReqDisabled] = useState(true);
-  const navigate = useNavigate();
-  const [time, setTime] = useState(initialTime);
   const [timeExpired, setTimeExpired] = useState(false);
   const { resetPassword } = useSelector((state) => state.user);
-
-  const [doSendOtp, loadingSentOtp, errorLoadingSentOtp, ,] =
-    useThunk(sendPasswordResetOtp);
-
   const [
     doVerifyOtp,
     loadingVerifyOtp,
@@ -26,32 +19,20 @@ export default function Otp({ email, closeModal }) {
     ,
     isVerifyOtpRan,
   ] = useThunk(verifyPasswordResetOtp);
-
-  //handling verify otp
-  const handleVerifyOtp = () => {
-    if (!timeExpired || !resetPassword?.userId || !resetPassword?.id) return;
-    if (!email) return;
-    const data = { otp, userId: resetPassword.userId, id: resetPassword.id };
-    doVerifyOtp(data, { duration: 4 });
-  };
-
-  //handling resend otp
-  const handleResendOtp = () => {
-    if (!email) return;
-    setIsResendReqDisabled(true);
-    setTime(initialTime);
-    setTimeout(() => {
-      setIsResendReqDisabled(false);
-    }, 10000);
-    setTimeExpired(false);
-    doSendOtp(email);
-  };
+  const navigate = useNavigate();
 
   //handling cancel verification
   const handleCancel = () => {
     setOtp("");
     closeModal();
   };
+
+  //handling verify otp
+  const handleVerifyOtp = useCallback(() => {
+    if (!email || otp.length < 6) return;
+    const data = { otp, userId: resetPassword.userId, id: resetPassword.id };
+    doVerifyOtp(data);
+  }, [doVerifyOtp, email, otp, resetPassword.userId, resetPassword.id]);
 
   //navigating after otp is verified
   useEffect(() => {
@@ -66,42 +47,6 @@ export default function Otp({ email, closeModal }) {
     }
   }, [isVerifyOtpRan, navigate, resetPassword.userId, resetPassword.id]);
 
-  //disabeling the resend button
-  useEffect(() => {
-    if (time.minutes === 9 && time.seconds === 0) {
-      setIsResendReqDisabled(false);
-    }
-  }, [time.minutes, time.seconds]);
-
-  //decreamenting the time
-  const startTimer = useCallback(() => {
-    let timeRemaining = 10 * 60 * 1000;
-
-    function updateTimer() {
-      const min = Math.floor(timeRemaining / (60 * 1000));
-      const sec = Math.floor((timeRemaining % (60 * 1000)) / 1000);
-
-      if (timeRemaining <= 0) {
-        clearInterval(timerInterval);
-        setTimeExpired(true);
-      } else {
-        timeRemaining -= 10 * 1000;
-      }
-
-      setTime({ minutes: min, seconds: sec });
-    }
-
-    const timerInterval = setInterval(updateTimer, 1000);
-
-    return () => {
-      clearInterval(timerInterval);
-    };
-  }, []);
-
-  useEffect(() => {
-    startTimer();
-  }, [startTimer]); // Run on mount
-
   return (
     <div>
       {/* heading */}
@@ -114,17 +59,14 @@ export default function Otp({ email, closeModal }) {
       {/* otp box */}
       <MuiOtpInput
         value={otp}
-        onChange={(v) => email && setOtp(v)}
+        onChange={(v) => setOtp(v)}
         length={6}
-        onComplete={handleVerifyOtp}
         autoFocus
       />
       {/* expiration time */}
       <div className="mt-3">
         otp expires in :{" "}
-        <span className="ctext-primary fw-bold ">
-          {time.minutes}:{time.seconds}
-        </span>
+        <Timer initialTime={initialTime} onTimeExpired={setTimeExpired} onRestart={()=> console.log("restarted")}/>
       </div>
 
       {/* errors */}
@@ -132,13 +74,9 @@ export default function Otp({ email, closeModal }) {
       <div className="text-error">
         {errorLoadingVerifyOtp && errorLoadingVerifyOtp}
       </div>
-      {/* otp resend */}
-      <div className="text-error">
-        {errorLoadingSentOtp && errorLoadingSentOtp}
-      </div>
 
       {/* action buttons */}
-      {loadingVerifyOtp || loadingSentOtp ? (
+      {loadingVerifyOtp ? (
         <div className="spinner-border ctext-primary" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
@@ -148,11 +86,11 @@ export default function Otp({ email, closeModal }) {
             Cancel
           </button>
           <button
-            className="btn btn-warning-emphasis"
-            onClick={handleResendOtp}
-            disabled={isResendReqDisabled || loadingSentOtp}
+            className="btn btn-primary"
+            onClick={handleVerifyOtp}
+            disabled={loadingVerifyOtp || timeExpired}
           >
-            Re-send OTP
+            verify
           </button>
         </div>
       )}

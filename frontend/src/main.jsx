@@ -9,12 +9,16 @@ import Registration from "./pages/Registration.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import ResetPassword from "./pages/ResetPassword.jsx";
+import NewPassword from "./pages/NewPassword.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Registration /> },
   { path: "/forgot-password", element: <ResetPassword /> },
+  { path: "/new-password", element: <NewPassword /> },
+  { path: "/*", element: <NotFound /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

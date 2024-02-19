@@ -48,9 +48,9 @@ import Layout from "./pages/layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import MyDocument from "./pages/MyDocument";
 import MyHealth from "./pages/MyHealth";
-import HappyMoment from "./pages/HappyMoment";
 import NewPassword from "./pages/NewPassword.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import Social from "./pages/Social";
 
 // const router = createBrowserRouter([
 //   { path: "/", element: <Home /> },
@@ -74,7 +74,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/dashboard" element={<Dashboard/>}/>
           <Route path="/mydocument" element={<MyDocument/>}/>
           <Route path="/myhealth" element={<MyHealth/>}/>
-          <Route path="/happymoment" element={<HappyMoment/>}/>
+          <Route path="/social" element={<Social/>}/>
         </Route>
       </Routes>
     </Provider>

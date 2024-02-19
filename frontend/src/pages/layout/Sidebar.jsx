@@ -46,7 +46,7 @@ const navItem = [
     icon: <VolunteerActivismIcon />,
   },
   {
-    text: "Happy Moment",
+    text: "Social",
     icon: <EmojiEmotionsOutlinedIcon />,
   },
 ];

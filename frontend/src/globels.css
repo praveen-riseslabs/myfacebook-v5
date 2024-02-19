@@ -2,6 +2,7 @@
   --primary-bg-color: #f36e6e;
   --secondary-bg-color: #f0a8a8;
   --white-bg-color: #fbfbfb;
+  --error-text: #dd2a2a;
 }
 
 #root {
@@ -38,7 +39,7 @@
 }
 
 .text-error {
-  color: red;
+  color: var(--error-text);
   font-size: 0.7rem;
   margin-top: 0.2rem;
 }

@@ -27,7 +27,7 @@ const Login = () => {
   //navigating after user successfully registered
   useEffect(() => {
     if (Object.keys(user).length === 0 && !loggedIn) return;
-    navigate("/", { replace: true });
+    navigate("/dashboard", { replace: true });
   }, [loggedIn, navigate, user]);
 
   return (

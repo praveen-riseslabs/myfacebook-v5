@@ -31,6 +31,9 @@ import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import EmojiEmotionsOutlinedIcon from '@mui/icons-material/EmojiEmotionsOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
 
 const navItem = [
   {
@@ -48,6 +51,18 @@ const navItem = [
   {
     text: "Social",
     icon: <EmojiEmotionsOutlinedIcon />,
+  },
+  {
+    text: "Instagram",
+    icon: <InstagramIcon />,
+  },
+  {
+    text: "Twitter",
+    icon: <TwitterIcon />,
+  },
+  {
+    text: "FaceBook",
+    icon: <FacebookIcon />,
   },
 ];
 
@@ -100,7 +115,7 @@ const Sidebar = ({
               </div>
             </Box>
             <List>
-              {navItem.map(({ text, icon }) => {
+              {navItem.map(({text, icon}) => {
 
                 const lcText = (text.replaceAll(' ', '').toLocaleLowerCase());
 

@@ -51,6 +51,9 @@ import MyHealth from "./pages/MyHealth";
 import NewPassword from "./pages/NewPassword.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Social from "./pages/Social";
+import Twitter from "./pages/Twitter";
+import Instagram from "./pages/Instagram";
+import Facebook from "./pages/Facebook";
 
 // const router = createBrowserRouter([
 //   { path: "/", element: <Home /> },
@@ -75,6 +78,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/mydocument" element={<MyDocument/>}/>
           <Route path="/myhealth" element={<MyHealth/>}/>
           <Route path="/social" element={<Social/>}/>
+          <Route path="/facebook" element={<Facebook/>}/>
+          <Route path="/twitter" element={<Twitter/>}/>
+          <Route path="/instagram" element={<Instagram/>}/>
         </Route>
       </Routes>
     </Provider>

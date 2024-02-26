@@ -1,7 +1,5 @@
 import { userModel } from "../models/userModel.js";
 import bcrypt from "bcrypt";
-import { mailTransporter, sendMail } from "../utils/mailTransporter.js";
-import { mailConfig } from "../utils/credentials.js";
 import crypto from "crypto";
 import { createJwtToken } from "../utils/createJwtToken.js";
 import { otpModel } from "../models/otpModel.js";
@@ -36,9 +34,6 @@ class UserController {
       const salt = await bcrypt.genSalt(Number(process.env.SALT_VALUE));
       const hash = await bcrypt.hash(password, salt);
 
-      //email tokens
-      const token = crypto.randomBytes(16).toString("hex");
-
       const newUser = new userModel({
         username,
         email,
@@ -46,54 +41,6 @@ class UserController {
       });
 
       await newUser.save();
-
-      //mail options (what to whom)
-      const mailOptions = {
-        from: {
-          name: "RisesLabs",
-          address: mailConfig.email,
-        },
-        to: email, // list of receivers
-        subject: "verify your email", // Subject line
-        html: `
-        <html lang="en">
-        <body>
-        <div style="width:100%;">
-        <div
-        style="
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-direction: column;
-          gap: 2rem;
-        "
-      >
-        <h3>Please click on the below link to verify your email</h3>
-        <div>
-        <a href="${process.env.CLIENT_URL}/verify/${token}" target="_blank" rel="noreferrer">
-          <button
-            style="
-              padding-inline: 1rem;
-              padding-block: 0.3rem;
-              font-weight: 600;
-              border-radius: 0.5rem;
-              color: white;
-              font-size: 1.1rem;
-              background: linear-gradient(to right, #009dff, #8a2be2);
-            "
-          >
-            Verify
-          </button>
-        </a>
-        </div>
-      </div>
-      </div>
-      </body>
-      </html>
-        `, // html body
-      };
-      //sending mail
-      //   sendMail(mailTransporter, mailOptions);
 
       res.status(201).json({
         username,
@@ -152,6 +99,75 @@ class UserController {
         username: user.username,
         email: user.email,
         userId: user._id,
+        fullname: user.fullname,
+        gender: user.gender,
+        country: user.country,
+        state: user.state,
+        district: user.district,
+        phoneNumber: user.phoneNumber,
+        timeZone: user.timeZone,
+        pic: user.pic,
+      });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+
+  //updating user details.........................................................................
+  static async updateUserDetails(req, res) {
+    try {
+      const user = req.user;
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const {
+        username,
+        email,
+        fullname,
+        gender,
+        country,
+        state,
+        district,
+        phoneNumber,
+        timeZone,
+        pic,
+      } = req.body;
+
+      if (!username || !email) {
+        throw new Error("username & email are required");
+      }
+
+      const updatedUser = await userModel.findByIdAndUpdate(
+        user._id,
+        {
+          username,
+          email,
+          fullname,
+          gender,
+          country,
+          state,
+          district,
+          phoneNumber,
+          timeZone,
+          pic,
+        },
+        { new: true }
+      );
+
+      res.status(200).json({
+        username: updatedUser.username,
+        email: updatedUser.email,
+        userId: user._id,
+        fullname: updatedUser.fullname,
+        gender: updatedUser.gender,
+        country: updatedUser.country,
+        state: updatedUser.state,
+        district: updatedUser.district,
+        phoneNumber: updatedUser.phoneNumber,
+        timeZone: updatedUser.timeZone,
+        pic: updatedUser.pic,
       });
     } catch (err) {
       res.status(400).json({ error: err.message });

@@ -1,6 +1,9 @@
 import { userModel } from "../models/userModel.js";
 import { otpModel } from "../models/otpModel.js";
 import bcrypt from "bcrypt";
+import { mailTransporter, sendMail } from "../utils/mailTransporter.js";
+import { mailConfig } from "../utils/credentials.js";
+import {getOtpHtml} from  "../utils/mailsFormats/otp.js"
 
 class OtpController {
   //password reset OPT...............................................................................
@@ -30,8 +33,20 @@ class OtpController {
       };
 
       const generatedOtp = generateOpt(6);
-      console.log("otp is :", generatedOtp);
+      console.log("your otp is :", generatedOtp);
       //send mail to specified email address
+      //mail options (what to whom)
+      const mailOptions = {
+        from: {
+          name: "RisesLabs",
+          address: mailConfig.email,
+        },
+        to: email,
+        subject: "no-reply",
+        html:getOtpHtml(generatedOtp)
+      };
+      //sending mail
+        sendMail(mailTransporter, mailOptions);
 
       //hashing otp
       const salt = await bcrypt.genSalt(4);

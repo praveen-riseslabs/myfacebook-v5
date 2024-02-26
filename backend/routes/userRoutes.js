@@ -21,4 +21,7 @@ router.put("/reset-password", UserController.resetPassword);
 //user details route
 router.get("/", requireAuth, UserController.getUserDetails);
 
+//update user details route
+router.put("/update", requireAuth, UserController.updateUserDetails);
+
 export default router

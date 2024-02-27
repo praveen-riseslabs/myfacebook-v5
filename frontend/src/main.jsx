@@ -54,6 +54,7 @@ import Social from "./pages/Social";
 import Twitter from "./pages/Twitter";
 import Instagram from "./pages/Instagram";
 import Facebook from "./pages/Facebook";
+import Profile from "./pages/Profile.jsx";
 
 // const router = createBrowserRouter([
 //   { path: "/", element: <Home /> },
@@ -81,7 +82,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/facebook" element={<Facebook/>}/>
           <Route path="/twitter" element={<Twitter/>}/>
           <Route path="/instagram" element={<Instagram/>}/>
+          <Route path="/profile" element={<Profile/>}/>
         </Route>
+       
       </Routes>
     </Provider>
   </BrowserRouter>

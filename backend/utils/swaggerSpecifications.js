@@ -9,6 +9,9 @@ export const swaggerSpecs = swaggerJSDoc({
       title: "My facebook App V1",
       version: "1.0.0",
     },
+    tags:[
+      {name: "User", description: "Operations related to user"}
+    ],
     servers: [{ url: `http://localhost:${port}/api/v1` }],
   },
   apis: ["./swagger/schemas.js", "./swagger/user.js"],

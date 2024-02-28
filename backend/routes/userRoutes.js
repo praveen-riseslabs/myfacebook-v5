@@ -5,8 +5,10 @@ import {requireAuth} from "../middlewares/requireAuth.js"
 
 const router = express.Router();
 
-//normal login routes
+//register new user
 router.post("/register", UserController.registerUser);
+
+//register new user
 router.post("/login", UserController.loginUser);
 
 //send reset password otp

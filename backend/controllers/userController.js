@@ -1,6 +1,5 @@
 import { userModel } from "../models/userModel.js";
 import bcrypt from "bcrypt";
-import crypto from "crypto";
 import { createJwtToken } from "../utils/createJwtToken.js";
 import { otpModel } from "../models/otpModel.js";
 
@@ -78,7 +77,6 @@ class UserController {
       res.status(200).json({
         username: user.username,
         email: user.email,
-        userId: user._id,
         token: createJwtToken(user._id),
       });
     } catch (err) {
@@ -159,7 +157,6 @@ class UserController {
       res.status(200).json({
         username: updatedUser.username,
         email: updatedUser.email,
-        userId: user._id,
         fullname: updatedUser.fullname,
         gender: updatedUser.gender,
         country: updatedUser.country,

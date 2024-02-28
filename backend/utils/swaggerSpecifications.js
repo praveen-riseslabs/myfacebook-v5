@@ -11,5 +11,5 @@ export const swaggerSpecs = swaggerJSDoc({
     },
     servers: [{ url: `http://localhost:${port}/api/v1` }],
   },
-  apis: ["./index.js", "./routes/userRoutes.js"],
+  apis: ["./swagger/schemas.js", "./swagger/user.js"],
 });

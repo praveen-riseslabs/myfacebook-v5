@@ -55,7 +55,7 @@ class UserController {
   static async loginUser(req, res) {
     try {
       const { usernameOrEmail, password } = req.body;
-
+      
       if (!usernameOrEmail || !password) {
         throw new Error("Fields must not be empty");
       }

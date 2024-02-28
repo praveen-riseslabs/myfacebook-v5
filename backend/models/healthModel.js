@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const documentSchema = new mongoose.Schema(
+const healthSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -32,8 +32,8 @@ const documentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-documentSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+healthSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-const documentModel = mongoose.model("documents", documentSchema);
+const healthModel = mongoose.model("documents", healthSchema);
 
-export { documentModel };
+export { healthModel };

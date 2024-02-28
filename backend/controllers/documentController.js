@@ -10,7 +10,7 @@ class DocumentController {
   // creating new document.................................................................
   static async createDocument(req, res) {
     try {
-      const { name, belongTo, description } = req.body;
+      const { name, belongTo } = req.body;
       const files = req.files;
       const user = req.user;
 
@@ -19,7 +19,7 @@ class DocumentController {
           "name, belong to and files fields are required to save a document"
         );
       }
-
+      
       //creating filenames
       const filenames = files.map((file) =>
         getFilename(user._id, file, belongTo)
@@ -46,7 +46,6 @@ class DocumentController {
         user,
         name,
         belongTo,
-        description,
         files: filenames,
       });
       await newDoc.save();
@@ -55,7 +54,7 @@ class DocumentController {
       const signedFiles = await Promise.all(
         newDoc.files.map(async (file) => {
           //GET object param
-          const getParam = {
+          const getParam = { 
             Bucket: bucketName,
             Key: file,
           };
@@ -108,8 +107,8 @@ class DocumentController {
   //update document .............................................................................
   static async updateDocument(req, res) {
     try {
-      const { id, name, description, belongTo } = req.body;
-      console.log(id, name, description, belongTo);
+      const { id, name, belongTo } = req.body;
+      console.log(id, name, belongTo);
       if (!name || !belongTo || !id) {
         throw new Error("id, name & belong To cannot be empty");
       }
@@ -119,7 +118,6 @@ class DocumentController {
         id,
         {
           name,
-          description,
           belongTo,
         },
         { new: true }

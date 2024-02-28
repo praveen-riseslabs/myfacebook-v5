@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 import { connectDb } from "./db/connectDb.js";
 import userRoutes from "./routes/userRoutes.js";
 import documentRoutes from "./routes/documentRoutes.js";
-
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpecs } from "./utils/swaggerSpecifications.js";
 
 //configuration
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use(express.json());
 
 //route middlewares
+app.use("/api/v1/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs))
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/document", documentRoutes);
 app.use("/*", (req, res) => {

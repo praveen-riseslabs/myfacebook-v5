@@ -70,7 +70,7 @@ export default function NewPassword() {
           boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <h2 className="">Registration</h2>
+        <h2 className="">New Password</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* password */}
           <div>

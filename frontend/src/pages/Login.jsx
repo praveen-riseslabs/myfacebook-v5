@@ -1,34 +1,19 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../store";
-import { useThunk } from "../hooks/useThunk";
-import { useSelector } from "react-redux";
 
 const Login = () => {
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  //extracting user state from store
-  const { user, loggedIn } = useSelector((state) => state.user);
-
-  const [doLoginUser, loadingUserLogin, errorUserLogin, resetLoginUserErrors] = useThunk(loginUser);
   let navigate = useNavigate();
 
   //handling login
   const handleLogin = (e) => {
     e.preventDefault();
-    resetLoginUserErrors()
     setUsernameOrEmail("")
     setPassword("")
     const data = { usernameOrEmail, password };
-    doLoginUser(data);
   };
-
-  //navigating after user successfully registered
-  useEffect(() => {
-    if (Object.keys(user).length === 0 && !loggedIn) return;
-    navigate("/dashboard", { replace: true });
-  }, [loggedIn, navigate, user]);
 
   return (
     <div className="d-flex justify-content-center h-100 cbg-secondary container-fluid">
@@ -63,11 +48,10 @@ const Login = () => {
 
           {/* server side error handling */}
           <div className="text-danger mt-3">
-            {errorUserLogin && `* ${errorUserLogin}`}
           </div>
 
           <div className="d-flex justify-content-center mt-4 px-5">
-            {loadingUserLogin ? (
+            {"loadingLogin" ? (
               <div className="spinner-border ctext-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>

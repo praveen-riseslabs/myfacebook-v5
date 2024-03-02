@@ -1,20 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { resetPassword } from "../store";
-import { useThunk } from "../hooks/useThunk";
-import { useEffect } from "react";
 import { VALIDATE } from "../utils/formValidations";
 import { useForm } from "react-hook-form";
 
 export default function NewPassword() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const [
-    doResetPassword,
-    loadingResetPassword,
-    errorLoadingResetPassword,
-    ,
-    isResetPasswordRan,
-  ] = useThunk(resetPassword);
 
   const {
     register,
@@ -35,7 +25,6 @@ export default function NewPassword() {
       id: state.id,
     };
 
-    doResetPassword(obj);
 
     if (isSubmitSuccessful) {
       reset();
@@ -48,19 +37,6 @@ export default function NewPassword() {
     navigate(-1);
   };
 
-  //navigating after successful changed password
-  useEffect(() => {
-    if (isResetPasswordRan) {
-      navigate("/login", { replace: true });
-    }
-  }, [isResetPasswordRan, navigate]);
-
-  //navigating back if user id and id are not present
-  useEffect(() => {
-    if (!state?.userId || !state?.id) {
-      navigate("/forgot-password", { replace: true });
-    }
-  }, [state?.id, navigate, state?.userId]);
 
   return (
     <div className="d-flex justify-content-center h-100 cbg-secondary container-fluid">
@@ -101,10 +77,9 @@ export default function NewPassword() {
 
           {/* server side error handling */}
           <div className="text-danger mt-3">
-            {errorLoadingResetPassword && `* ${errorLoadingResetPassword}`}
           </div>
 
-          {loadingResetPassword ? (
+          {"loadingResetPassword" ? (
             <div className="spinner-border ctext-primary" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>

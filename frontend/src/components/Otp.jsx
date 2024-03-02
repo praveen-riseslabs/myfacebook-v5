@@ -12,22 +12,12 @@ export default function Otp({ email, closeModal }) {
   const [otp, setOtp] = useState("");
   const [timeExpired, setTimeExpired] = useState(false);
   const { resetPassword } = useSelector((state) => state.user);
-  const [
-    doVerifyOtp,
-    loadingVerifyOtp,
-    errorLoadingVerifyOtp,
-    ,
-    isVerifyOtpRan,
-  ] = useThunk(verifyPasswordResetOtp);
-  const navigate = useNavigate();
 
-  const [doSendOtp, loadingSentOtp, errorLoadingSentOtp] =
-    useThunk(sendPasswordResetOtp);
+  const navigate = useNavigate();
 
   //handling resend otp
   const handleResendOtp = () => {
     if (!email) return;
-    doSendOtp(email);
   };
 
   //handling cancel verification
@@ -40,21 +30,20 @@ export default function Otp({ email, closeModal }) {
   const handleVerifyOtp = useCallback(() => {
     if (!email || otp.length < 6) return;
     const data = { otp, userId: resetPassword.userId, id: resetPassword.id };
-    doVerifyOtp(data);
-  }, [doVerifyOtp, email, otp, resetPassword.userId, resetPassword.id]);
+  }, [email, otp, resetPassword.userId, resetPassword.id]);
 
   //navigating after otp is verified
-  useEffect(() => {
-    if (isVerifyOtpRan) {
-      navigate("/new-password", {
-        replace: true,
-        state: {
-          userId: resetPassword.userId,
-          id: resetPassword.id,
-        },
-      });
-    }
-  }, [isVerifyOtpRan, navigate, resetPassword.userId, resetPassword.id]);
+  // useEffect(() => {
+  //   if (isVerifyOtpRan) {
+  //     navigate("/new-password", {
+  //       replace: true,
+  //       state: {
+  //         userId: resetPassword.userId,
+  //         id: resetPassword.id,
+  //       },
+  //     });
+  //   }
+  // }, [isVerifyOtpRan, navigate, resetPassword.userId, resetPassword.id]);
 
   return (
     <div>
@@ -85,15 +74,13 @@ export default function Otp({ email, closeModal }) {
       {/* errors */}
       {/* otp verification */}
       <div className="text-error">
-        {errorLoadingVerifyOtp && errorLoadingVerifyOtp}
       </div>
       {/* resend otp*/}
       <div className="text-error">
-        {errorLoadingSentOtp && errorLoadingSentOtp}
       </div>
 
       {/* action buttons */}
-      {loadingVerifyOtp || loadingSentOtp ? (
+      {"loadingVerifyOtp" || "loadingSentOtp" ? (
         <div className="d-flex justify-content-center">
           <div className="spinner-border ctext-primary" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -107,7 +94,7 @@ export default function Otp({ email, closeModal }) {
           <button
             className="btn btn-primary"
             onClick={handleVerifyOtp}
-            disabled={loadingVerifyOtp || timeExpired || loadingSentOtp}
+            disabled={timeExpired }
           >
             verify
           </button>

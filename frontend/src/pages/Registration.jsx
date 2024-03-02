@@ -1,8 +1,4 @@
-import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { registerUser } from "../store";
-import { useThunk } from "../hooks/useThunk";
-import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { VALIDATE } from "../utils/formValidations";
 
@@ -15,36 +11,20 @@ function Registration() {
     getValues
   } = useForm({ mode: "all" });
 
-  const [
-    doRegisterUser,
-    loadingUserRegister,
-    errorUserRegister,
-    resetRegistrationUserErrors,
-  ] = useThunk(registerUser);
 
   let navigate = useNavigate();
 
-  //extracting user state from store
-  const { user, loggedIn } = useSelector((state) => state.user);
 
   //handling registration
   const onSubmit = (data,e) => {
     e.preventDefault();
 
-    resetRegistrationUserErrors();
-    doRegisterUser(data);
 
     if (isSubmitSuccessful) {
       reset();
     }
   };
-  
-  //navigating after user successfully registered
-  useEffect(() => {
-    if (Object.keys(user).length === 0 && !loggedIn) return;
-    navigate("/dashboard", { replace: true });
-  }, [loggedIn, navigate, user]);
-
+ 
   return (
     <div className="d-flex justify-content-center h-100 cbg-secondary container-fluid">
       <div
@@ -105,11 +85,10 @@ function Registration() {
 
           {/* server side error handling */}
           <div className="text-danger mt-3">
-            {errorUserRegister && `* ${errorUserRegister}`}
           </div>
 
           <div className="d-flex justify-content-center mt-4 px-5">
-            {loadingUserRegister ? (
+            {"loadingUserRegister" ? (
               <div className="spinner-border ctext-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>

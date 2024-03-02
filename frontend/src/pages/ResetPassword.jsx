@@ -1,28 +1,18 @@
-import { useEffect, useState } from "react";
-import { sendPasswordResetOtp } from "../store";
+import {  useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useThunk } from "../hooks/useThunk";
 import ModalNonClosable from "../components/Modal";
 import Otp from "../components/Otp";
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [
-    doSendOtp,
-    loadingSentOtp,
-    errorLoadingSentOtp,
-    ,
-    isSentOtpRan,
-    resetIsSentOtpRan,
-  ] = useThunk(sendPasswordResetOtp);
+
 
   const navigate = useNavigate();
 
   //handling otp send
   const handleSendOTP = () => {
     if (!email) return;
-    doSendOtp(email, { duration: 4 });
   };
 
   //handling cancel
@@ -31,10 +21,6 @@ export default function ResetPassword() {
     navigate(-1);
   };
 
-  //opening opt model after successful sending pass reset otp
-  useEffect(() => {
-    setIsModalOpen(isSentOtpRan);
-  }, [isSentOtpRan]);
 
   return (
     <>
@@ -64,7 +50,6 @@ export default function ResetPassword() {
               autoComplete="off"
             />
             <div className="text-error">
-              {errorLoadingSentOtp && errorLoadingSentOtp}
             </div>
           </div>
 
@@ -73,13 +58,12 @@ export default function ResetPassword() {
             <button className="btn btn-secondary" onClick={handleCancel}>
               Cancel
             </button>
-            {loadingSentOtp ? (
+            {"loadingSentOtp" ? (
               <div className="spinner-border ctext-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
             ) : (
               <button
-                disabled={errorLoadingSentOtp || loadingSentOtp}
                 className="btn btn-primary"
                 onClick={handleSendOTP}
               >
@@ -90,7 +74,7 @@ export default function ResetPassword() {
         </div>
       </div>
       <ModalNonClosable open={isModalOpen}>
-        <Otp email={email} closeModal={resetIsSentOtpRan} />
+        <Otp email={email} closeModal={""} />
       </ModalNonClosable>
     </>
   );

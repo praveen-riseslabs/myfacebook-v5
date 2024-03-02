@@ -14,5 +14,5 @@ export const swaggerSpecs = swaggerJSDoc({
     ],
     servers: [{ url: `http://localhost:${port}/api/v1` }],
   },
-  apis: ["./swagger/schemas.js", "./swagger/user.js"],
+  apis: ["./swagger/schemas.yml", "./swagger/user.yml"],
 });

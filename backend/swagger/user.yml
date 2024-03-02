@@ -1,0 +1,227 @@
+#....................................user register..............................................
+paths:
+  /user/register:
+    post:
+      tags:
+        - User
+      summary: Register a new user
+      description: use this api to create or register a new user
+      requestBody:
+        description: Create a new user
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: exampleUser
+                email:
+                  type: string
+                  example: example@gmail.com
+                password:
+                  type: string
+                  example: abcd1234
+                confirmPassword:
+                  type: string
+                  example: abcd1234
+      responses:
+        "201":
+          description: on succesfully registering
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    example: exampleUser
+                  email:
+                    type: string
+                    example: example@gmail.com
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+  #....................................user login..............................................
+  /user/login:
+    post:
+      tags:
+        - User
+      summary: Login existing user
+      description: use this api to login existing user
+      requestBody:
+        description: login existing user
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usernameOrEmail:
+                  type: string
+                  example: exampleUser
+                password:
+                  type: string
+                  example: abcd1234
+      responses:
+        "200":
+          description: on succesfully login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    example: exampleUser
+                  email:
+                    type: string
+                    example: example@gmail.com
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+  #..................................forgot password - send otp......................................
+  /user/password-recovery:
+    post:
+      tags:
+        - User
+      summary: Password recovery
+      description: use this api to send otp on registered email addresses
+      requestBody:
+        description: send otp on registered email addresses
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  example: example@gmail.com
+      responses:
+        "200":
+          description: on succesfully otp sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 65e016dcc549adc9975804b6
+                    description: Unique identifier for otp
+                  userId:
+                    type: string
+                    example: 65e001f57b1125c20f6946a3
+                    description: Unique identifier of the user who sent the otp
+
+  #..................................forgot password - verify otp....................................
+  /user/otp-verify:
+    post:
+      tags:
+        - User
+      summary: Verify OTP
+      description: use this api to verify otp sent on registered email addresses
+      requestBody:
+        description: send otp on registered email addresses
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                otp:
+                  type: string
+                  example: 647332
+                  description: one time password
+                id:
+                  type: string
+                  example: 65e016dcc549adc9975804b6
+                  description: Unique identifier for otp
+                userId:
+                  type: string
+                  example: 65e001f57b1125c20f6946a3
+                  description: Unique identifier of the user who sent the otp
+      responses:
+        "200":
+          description: on succesfully otp verification
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 65e016dcc549adc9975804b6
+                    description: Unique identifier for otp
+                  userId:
+                    type: string
+                    example: 65e001f57b1125c20f6946a3
+                    description: Unique identifier of the user who sent the otp
+
+  #................................reset password - create new password.............................
+  /user/reset-password:
+    put:
+      tags:
+        - User
+      summary: New Password
+      description: use this api to create new password
+      requestBody:
+        description: enter new password
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                password:
+                  type: string
+                  example: password
+                  description: new password
+                confirmPassword:
+                  type: string
+                  example: password
+                  description: confirm new password
+                id:
+                  type: string
+                  example: 65e016dcc549adc9975804b6
+                  description: Unique identifier for otp
+                userId:
+                  type: string
+                  example: 65e001f57b1125c20f6946a3
+                  description: Unique identifier of the user who sent the otp
+      responses:
+        "200":
+          description: on succesfully reseting the password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                    description: a succes message
+
+  #................................get user details...............................................
+  /user:
+    get:
+      tags:
+        - User
+      summary: Get user details
+      description: use this api to fetch logged in user details
+      parameters:
+        - name: authorization
+          in: header
+          description: enter the bearer token that you get when login
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+      responses:
+        "200":
+          description: on success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"

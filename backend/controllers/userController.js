@@ -105,6 +105,8 @@ class UserController {
         phoneNumber: user.phoneNumber,
         timeZone: user.timeZone,
         pic: user.pic,
+        joinedAt: user.createdAt,
+        lastUpdatedAt: user.updatedAt
       });
     } catch (err) {
       res.status(400).json({ error: err.message });
@@ -165,6 +167,8 @@ class UserController {
         phoneNumber: updatedUser.phoneNumber,
         timeZone: updatedUser.timeZone,
         pic: updatedUser.pic,
+        joinedAt: updatedUser.createdAt,
+        lastUpdatedAt: updatedUser.updatedAt
       });
     } catch (err) {
       res.status(400).json({ error: err.message });

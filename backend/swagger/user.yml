@@ -225,3 +225,70 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
+
+  #................................updating user details............................................
+  /user/update:
+    put:
+      tags:
+        - User
+      summary: Update user details
+      description: use this api to update user details
+      requestBody:
+        description: below changed fields will be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: example
+                  description: username has to be unique
+                email:
+                  type: string
+                  example: example@gmail.com
+                  description: email has to be unique
+                fullname:
+                  type: string
+                  example: example example
+                gender:
+                  type: string
+                  example: male
+                dob:
+                  type: string
+                  example: 01/05/2024
+                country:
+                  type: string
+                  example: india
+                state:
+                  type: string
+                  example: telangana
+                district:
+                  type: string
+                  example: hydrabad
+                phoneNumber:
+                  type: string
+                  example: 7329733932
+                timeZone:
+                  type: string
+                  example: "IST"
+                pic:
+                  type: string
+                  example: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Windows_10_Default_Profile_Picture.svg/2048px-Windows_10_Default_Profile_Picture.svg.png"
+                  description: "url of the picture"
+      parameters:
+        - name: authorization
+          in: header
+          description: enter the bearer token that you get when login
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+      responses:
+        "200":
+          description: on success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"

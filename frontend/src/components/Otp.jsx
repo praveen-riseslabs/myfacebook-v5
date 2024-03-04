@@ -1,17 +1,13 @@
 import { MuiOtpInput } from "mui-one-time-password-input";
 import Timer from "./Timer";
 import { useCallback, useEffect, useState } from "react";
-import { sendPasswordResetOtp, verifyPasswordResetOtp } from "../store";
-import { useThunk } from "../hooks/useThunk";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 const initialTime = { minutes: 10, seconds: 0 };
 
 export default function Otp({ email, closeModal }) {
   const [otp, setOtp] = useState("");
   const [timeExpired, setTimeExpired] = useState(false);
-  const { resetPassword } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
 
@@ -27,10 +23,10 @@ export default function Otp({ email, closeModal }) {
   };
 
   //handling verify otp
-  const handleVerifyOtp = useCallback(() => {
-    if (!email || otp.length < 6) return;
-    const data = { otp, userId: resetPassword.userId, id: resetPassword.id };
-  }, [email, otp, resetPassword.userId, resetPassword.id]);
+  // const handleVerifyOtp = useCallback(() => {
+  //   if (!email || otp.length < 6) return;
+  //   const data = { otp, userId: resetPassword.userId, id: resetPassword.id };
+  // }, [email, otp, resetPassword.userId, resetPassword.id]);
 
   //navigating after otp is verified
   // useEffect(() => {
@@ -93,7 +89,7 @@ export default function Otp({ email, closeModal }) {
           </button>
           <button
             className="btn btn-primary"
-            onClick={handleVerifyOtp}
+            onClick={()=>""}
             disabled={timeExpired }
           >
             verify

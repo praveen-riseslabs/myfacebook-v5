@@ -108,7 +108,7 @@ class DocumentController {
   static async updateDocument(req, res) {
     try {
       const { id, name, belongTo } = req.body;
-      console.log(id, name, belongTo);
+      
       if (!name || !belongTo || !id) {
         throw new Error("id, name & belong To cannot be empty");
       }

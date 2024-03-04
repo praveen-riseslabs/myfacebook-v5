@@ -1,86 +1,133 @@
 components:
   schemas:
- #................................user schema..................................................
-     User:
-         type : object
-         properties:
-             _id :
-                    type: string
-                    example: 4628625227824824
-                    description: Unique identifier for the user
-             username :
-                    type: string
-                    example: exampleUser
-                    description: Unique username for the user
-             email :
-                    type: string
-                    example: example@gmail.com
-                    description: Unique email for the user
-             password :
-                    type: string
-                    example: password
-                    description: Password (encrypted) of the user this will not be in response object
-             fullname :
-                    type: string
-                    example: example example
-             dob :
-                    type: string
-                    example: 74/12/2024
-             gender :
-                    type: string
-                    example: preferNotToSay
-                    enum: 
-                      - male
-                      - female
-                      - preferNotToSay
-             country :
-                    type: string
-                    example: india
-             state :
-                    type: string
-                    example: maharashtra
-             district :
-                    type: string
-                    example: nagpur
-             phoneNumber :
-                    type: string
-                    example: 4336426682
-             timeZone :
-                    type: string
-                    example: IST
-             pic :
-                    type: string
-                    example: example.png
-             joinedAt :
-                    type: date-time
-                    example: '2023-12-16T14:09:48.068+00:00'
-                    description: "This is auto generated date from mongodb"
-             lastUpdatedAt :
-                    type: date-time
-                    example: '2023-12-16T14:09:48.068+00:00'
-                    description: "This is auto generated date from mongodb"
+    #................................user schema..................................................
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 4628625227824824
+          description: Unique identifier for the user
+        username:
+          type: string
+          example: exampleUser
+          description: Unique username for the user
+        email:
+          type: string
+          example: example@gmail.com
+          description: Unique email for the user
+        password:
+          type: string
+          example: password
+          description: Password (encrypted) of the user this will not be in response object
+        fullname:
+          type: string
+          example: example example
+        dob:
+          type: string
+          example: 74/12/2024
+        gender:
+          type: string
+          example: preferNotToSay
+          enum:
+            - male
+            - female
+            - preferNotToSay
+        country:
+          type: string
+          example: india
+        state:
+          type: string
+          example: maharashtra
+        district:
+          type: string
+          example: nagpur
+        phoneNumber:
+          type: string
+          example: 4336426682
+        timeZone:
+          type: string
+          example: IST
+        pic:
+          type: string
+          example: example.png
+        joinedAt:
+          type: date-time
+          example: "2023-12-16T14:09:48.068+00:00"
+          description: "This is auto generated date from mongodb"
+        lastUpdatedAt:
+          type: date-time
+          example: "2023-12-16T14:09:48.068+00:00"
+          description: "This is auto generated date from mongodb"
 
- #................................otp schema..................................................
-     Otp:
-         type : object
-         properties:
-             _id :
-                    type: string
-                    example: 4628625227824824
-                    description: Unique identifier for the otp
-             userId :
-                    type: string
-                    example: exampleUser
-                    description: Unique identifier for the user
-             otp :
-                    type: string
-                    example: example@gmail.com
-                    description: encrypted otp
-             createdAt :
-                    type: date-time
-                    example: '2023-12-16T14:09:48.068+00:00'
-                    description: "This is auto generated date from mongodb"
-             updatedAt :
-                    type: date-time
-                    example: '2023-12-16T14:09:48.068+00:00'
-                    description: "This is auto generated date from mongodb"
+    #................................otp schema..................................................
+    Otp:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 4628625227824824
+          description: Unique identifier for the otp
+        userId:
+          type: string
+          example: exampleUser
+          description: Unique identifier for the user
+        otp:
+          type: string
+          example: example@gmail.com
+          description: encrypted otp
+        createdAt:
+          type: date-time
+          example: "2023-12-16T14:09:48.068+00:00"
+          description: "This is auto generated date from mongodb"
+        updatedAt:
+          type: date-time
+          example: "2023-12-16T14:09:48.068+00:00"
+          description: "This is auto generated date from mongodb"
+
+    #................................document schema................................................
+    Document:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 4628625227824824
+          description: Unique identifier for the document
+        user:
+          type: object
+          example:
+            $ref: "#/components/schemas/User"
+          descripiton: User this document belongs to
+        name:
+          type: string
+          example: example
+        belongTo:
+          type: string
+          example: brother
+        trashed:
+          type: boolean
+          example: false
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              filename:
+                type: string
+                example: "example.jpg"
+              url:
+                type: string
+                format: uri
+                example: "https://example.com/files/picture"
+        expiredAt:
+          type: date-time
+          example: "2023-12-16T14:09:48.068+00:00"
+          description: "This field will decide when the document will delete itself after the defined date & time"
+        createdAt:
+          type: date-time
+          example: "2023-12-16T14:09:48.068+00:00"
+          description: "This is auto generated date from mongodb"
+        updatedAt:
+          type: date-time
+          example: "2023-12-16T14:09:48.068+00:00"
+          description: "This is auto generated date from mongodb"

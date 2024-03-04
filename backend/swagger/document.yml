@@ -1,0 +1,183 @@
+#....................................create new document............................................
+paths:
+  /document/new:
+    post:
+      tags:
+        - Document
+      summary: Create a new document
+      description: use this api to create a new document
+      consumes:
+        - application/json
+        - application/octet-stream
+      requestBody:
+        description: Create a new document
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: testDoc
+                belongTo:
+                  type: string
+                  example: brother
+      parameters:
+        - name: authorization
+          in: header
+          description: enter the bearer token that you get when login
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+      responses:
+        "200":
+          description: on success
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Document"
+
+#....................................delete a document permanently..............................
+  /document/{docId}:
+    delete:
+      tags:
+        - Document
+      summary: Delete a document permanently
+      description: use this api to delete a document permanently
+      parameters:
+        - name: authorization
+          in: header
+          description: enter the bearer token that you get when login
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        - name: docId
+          in: path
+          description: enter the id of the document to delete
+          schema:
+            type: string
+            example: 4628625227824824
+      responses:
+        "200":
+          description: on success deleted doc is returned
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Document"
+
+#....................................update a document...................................
+  /document/update:
+    put:
+      tags:
+        - Document
+      summary: Update a document
+      description: use this api to update an existing document
+      parameters:
+        - name: authorization
+          in: header
+          description: enter the bearer token that you get when login
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+      requestBody:
+        description: Update the following document
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: 4628625227824824
+                  description: id of document
+                name:
+                  type: string
+                  example: testDoc
+                belongTo:
+                  type: string
+                  example: brother
+      responses:
+        "200":
+          description: on success deleted doc is returned
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Document"
+
+#....................................get all documents............................................
+/document:
+    get:
+      tags:
+        - Document
+      summary: Get all documents
+      description: use this api to fetch all user saved documents
+      parameters:
+        - name: authorization
+          in: header
+          description: enter the bearer token that you get when login
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        - name: page
+          in: query
+          description: enter the page number you want to retrieve default is 1
+          schema:
+            type: string
+            example: 1
+        - name: docPerPage
+          in: query
+          description: enter the number of documents per page you want to retrieve default is 10
+          schema:
+            type: string
+            example: 10
+      responses:
+        "200":
+          description: on success
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/Document"
+
+#....................................get single documents............................................
+/document/{id}:
+    get:
+      tags:
+        - Document
+      summary: Get single documents
+      description: use this api to fetch single document
+      parameters:
+        - name: authorization
+          in: header
+          description: enter the bearer token that you get when login
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        - name: id
+          in: path
+          description: enter the id of the document
+          schema:
+            type: string
+            example: 4628625227824824
+      responses:
+        "200":
+          description: on success
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Document"

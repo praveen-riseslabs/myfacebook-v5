@@ -41,6 +41,10 @@ import {
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Registration from "./pages/Registration.jsx";
+
+// import { Provider } from "react-redux";
+// import { store } from "./store";
+
 import ResetPassword from "./pages/ResetPassword.jsx";
 import Layout from "./pages/layout/Layout";
 import Dashboard from "./pages/Dashboard";

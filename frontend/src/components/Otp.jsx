@@ -1,6 +1,10 @@
 import { MuiOtpInput } from "mui-one-time-password-input";
 import Timer from "./Timer";
 import { useCallback, useEffect, useState } from "react";
+
+// import { sendPasswordResetOtp, verifyPasswordResetOtp } from "../store";
+// import { useThunk } from "../hooks/useThunk";
+
 import { useNavigate } from "react-router-dom";
 
 const initialTime = { minutes: 10, seconds: 0 };

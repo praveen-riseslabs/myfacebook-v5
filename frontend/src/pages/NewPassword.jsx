@@ -1,21 +1,18 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { VALIDATE } from "../utils/formValidations";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
+import axios from "axios";
 
 export default function NewPassword() {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const [loadingResetPassword, setLoadingSentOtp] =useState(false)
 
-  const {
-    register,
-    reset,
-    formState: { errors, isSubmitSuccessful },
-    handleSubmit,
-    getValues,
-  } = useForm({ mode: "all" });
+  const { register, reset, formState: { errors, isSubmitSuccessful }, handleSubmit, getValues, } = useForm({ mode: "all" });
 
   //handling set new password
-  const onSubmit = (data, e) => {
+  const onSubmit = async (data, e) => {
     e.preventDefault();
     if (!state?.userId || !state?.id) return;
     const obj = {
@@ -25,8 +22,11 @@ export default function NewPassword() {
       id: state.id,
     };
 
+    let res = await axios.put("http://localhost:4000/api/v1/user/reset-password",obj)
+    console.log(res)
 
-    if (isSubmitSuccessful) {
+    if (res.data.message = "success") {
+      navigate('/login')
       reset();
     }
   };
@@ -36,6 +36,7 @@ export default function NewPassword() {
     reset();
     navigate(-1);
   };
+  
 
 
   return (
@@ -79,7 +80,7 @@ export default function NewPassword() {
           <div className="text-danger mt-3">
           </div>
 
-          {"loadingResetPassword" ? (
+          {loadingResetPassword ? (
             <div className="spinner-border ctext-primary" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
@@ -88,7 +89,7 @@ export default function NewPassword() {
               <button className="btn btn-secondary" onClick={handleCancelClick}>
                 Cancel
               </button>
-              <button className="btn btn-primary" type="submit">
+              <button className="btn btn-primary" type="submit" >
                 Submit
               </button>
             </div>

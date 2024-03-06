@@ -1,18 +1,31 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
-
   let navigate = useNavigate();
+
+  axios.defaults.withCredentials = true
 
   //handling login
   const handleLogin = (e) => {
     e.preventDefault();
-    setUsernameOrEmail("")
-    setPassword("")
-    const data = { usernameOrEmail, password };
+    // setUsernameOrEmail("")
+    // setPassword("")
+    // const data = { usernameOrEmail, password };
+    axios
+    .post("http://localhost:4000/api/v1/user/login", { usernameOrEmail , password })
+    .then((result) => {
+      console.log(result);
+      // if (result.data === "Success") {
+        // navigate("/home");
+        navigate("/dashboard");
+
+      // }
+    })
+    .catch((err) => console.log(err));
   };
 
   return (
@@ -51,7 +64,10 @@ const Login = () => {
           </div>
 
           <div className="d-flex justify-content-center mt-4 px-5">
-            {"loadingLogin" ? (
+              <button className="btn btn-primary" type="submit">
+                Login
+              </button>
+            {/* {"loadingLogin" ? (
               <div className="spinner-border ctext-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
@@ -59,7 +75,7 @@ const Login = () => {
               <button className="btn btn-primary" type="submit">
                 Login
               </button>
-            )}
+            )} */}
           </div>
 
           <div className="d-flex flex-column justify-content-center align-items-center gap-1 mt-3">

@@ -1,6 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { VALIDATE } from "../utils/formValidations";
+import { useState } from "react";
+import axios from 'axios'
+
 
 function Registration() {
   const {
@@ -8,23 +11,36 @@ function Registration() {
     reset,
     formState: { errors, isSubmitSuccessful },
     handleSubmit,
-    getValues
+    getValues,
   } = useForm({ mode: "all" });
+
+  const [username, setUsername] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
+  // const baseURL = import.meta.env.VITE_SERVER_BASE_API_V1;
 
 
   let navigate = useNavigate();
 
-
   //handling registration
-  const onSubmit = (data,e) => {
+  const onSubmit = (data, e) => {
     e.preventDefault();
+    console.log(username, email, password, confirmPassword)
+    axios
+      .post("http://localhost:4000/api/v1/user/register", { username, email, password, confirmPassword })
+      .then((result) => {
+        console.log(result);
+        localStorage.setItem('token', result.data.token)
+        navigate("/dashboard");
+      })
+      .catch((err) => console.log(err));
 
-
-    if (isSubmitSuccessful) {
-      reset();
-    }
+    // if (isSubmitSuccessful) {
+    //   reset();
+    // }
   };
- 
+
   return (
     <div className="d-flex justify-content-center h-100 cbg-secondary container-fluid">
       <div
@@ -43,6 +59,7 @@ function Registration() {
               className="form-control"
               placeholder="Enter your username"
               {...register("username", VALIDATE().username)}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <div className="text-error">{errors.username?.message}</div>
           </div>
@@ -55,6 +72,7 @@ function Registration() {
               className="form-control"
               placeholder="Enter your email"
               {...register("email", VALIDATE().email)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <div className="text-error">{errors.email?.message}</div>
           </div>
@@ -67,6 +85,7 @@ function Registration() {
               className="form-control"
               placeholder="Enter your password"
               {...register("password", VALIDATE().password)}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <div className="text-error">{errors.password?.message}</div>
           </div>
@@ -78,16 +97,20 @@ function Registration() {
               type="password"
               className="form-control"
               placeholder="Enter confirm password"
-              {...register("confirmPassword", VALIDATE(getValues).confirmPassword)}
+              {...register(
+                "confirmPassword",
+                VALIDATE(getValues).confirmPassword
+              )}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <div className="text-error">{errors.confirmPassword?.message}</div>
           </div>
 
           {/* server side error handling */}
-          <div className="text-danger mt-3">
-          </div>
+          <div className="text-danger mt-3"></div>
 
           <div className="d-flex justify-content-center mt-4 px-5">
+            {/* 
             {"loadingUserRegister" ? (
               <div className="spinner-border ctext-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
@@ -97,6 +120,10 @@ function Registration() {
                 Register
               </button>
             )}
+             */}
+            <button className="btn btn-primary" type="submit">
+              Register
+            </button>
           </div>
 
           <div className="d-flex justify-content-center mt-3">

@@ -69,7 +69,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
       <Routes>
         {/* <RouterProvider router={router} /> */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/forgot-password" element={<ResetPassword />} />

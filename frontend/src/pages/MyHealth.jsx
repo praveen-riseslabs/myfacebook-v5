@@ -23,7 +23,8 @@ const HealthRecords = () => {
     hospitalName: '',
     visitDate: '',
     adharCardNumber: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    description: ''
   })
 
   // Function to handle health record uploads
@@ -43,7 +44,8 @@ const HealthRecords = () => {
       hospitalName: '',
       visitDate: '',
       adharCardNumber: '',
-      phoneNumber: ''
+      phoneNumber: '',
+      description: ''
     });
   };
 
@@ -65,6 +67,7 @@ const HealthRecords = () => {
             required 
           />
         </div>
+      
         <div className="col-md-6">
           <label htmlFor="doctorName" className="form-label">Doctor Name</label>
           <input 
@@ -125,10 +128,25 @@ const HealthRecords = () => {
             required 
           />
         </div>
+        <div className="col-md-6">
+          <label htmlFor="description" className="form-label">Description</label>
+          <textarea
+            className="form-control"
+            id="description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            required
+          ></textarea>
+        </div>
         <div className="col-12">
+        <input type="file" accept=".pdf, .doc, .docx" />
           <button type="submit" className="btn btn-primary">Upload</button>
         </div>
+
+        
       </form>
+
 
       {/* Display health records */}
       <div className="mt-4">

@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { connectDb } from "./db/connectDb.js";
 import userRoutes from "./routes/userRoutes.js";
 import documentRoutes from "./routes/documentRoutes.js";
+import healthRoutes from "./routes/healthRoutes.js";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpecs } from "./utils/swaggerSpecifications.js";
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use("/api/v1/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs))
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/document", documentRoutes);
+app.use("/api/v1/health", healthRoutes);
 app.use("/*", (req, res) => {
   res.status(404).json({ message: "Not Found" });
 });

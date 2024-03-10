@@ -3,7 +3,7 @@ import {
   GetObjectCommand,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
-import { bucketName, getFilename, s3, signedUrl } from "../utils/s3Client.js";
+import { bucketName, getFilename, s3, s3DocumentBaseFolder, signedUrl } from "../utils/s3Client.js";
 import { documentModel } from "../models/documentModel.js";
 
 class DocumentController {
@@ -22,7 +22,7 @@ class DocumentController {
       
       //creating filenames
       const filenames = files.map((file) =>
-        getFilename(user._id, file, belongTo)
+        getFilename(s3DocumentBaseFolder,user._id, file, belongTo)
       );
 
       //   creating new object and saving it to s3 bucket
@@ -80,7 +80,7 @@ class DocumentController {
       const { docId } = req.params;
       const document = await documentModel.findById(docId);
 
-      if (!docId) {
+      if (!document) {
         throw new Error("coudn't find document");
       }
 

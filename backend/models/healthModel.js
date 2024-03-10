@@ -6,34 +6,40 @@ const healthSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
-    name: {
+    username: {
       type: String,
-      trim: true,
+      requied: true,
+    },
+    doctorName: {
+      type: String,
       required: true,
     },
-    belongTo: {
+    hospitalName: {
       type: String,
       required: true,
+    },
+    descripiton: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    adharCardNumber: {
+      type: String,
+      trim: true,
+    },
+    phoneNumber: {
+      type: String,
+      trim: true,
     },
     files: [
       {
         type: String,
       },
     ],
-    trashed: {
-      type: Boolean,
-      default: false,
-    },
-    expiresAt: {
-      type: Date,
-      default: null,
-    },
   },
   { timestamps: true }
 );
 
-healthSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
-
-const healthModel = mongoose.model("documents", healthSchema);
+const healthModel = mongoose.model("health", healthSchema);
 
 export { healthModel };

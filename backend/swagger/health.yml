@@ -1,0 +1,57 @@
+#....................................create new record............................................
+paths:
+  /health/new:
+    post:
+      tags:
+        - Health
+      summary: Create a new record
+      description: use this api to create a new health record
+      consumes:
+        - application/json
+        - application/octet-stream
+      requestBody:
+        description: Create a new health record
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: example
+                doctorName:
+                  type: string
+                  example: doc. example
+                hospitalName:
+                  type: string
+                  example: city hospital
+                descripiton:
+                  type: string
+                  example: descripiton about the visit and other healht related things 
+                adharCardNumber:
+                  type: string
+                  example: 123451234512
+                phoneNumber:
+                  type: string
+                  example: 9843473434
+      parameters:
+        - name: authorization
+          in: header
+          description: enter the bearer token that you get when login
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+      responses:
+        "200":
+          description: on success
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Health"

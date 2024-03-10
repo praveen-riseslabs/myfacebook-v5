@@ -97,7 +97,7 @@ components:
           type: object
           example:
             $ref: "#/components/schemas/User"
-          descripiton: User this document belongs to
+          descripiton: User to whom this document belongs to
         name:
           type: string
           example: example
@@ -127,6 +127,58 @@ components:
           type: date-time
           example: "2023-12-16T14:09:48.068+00:00"
           description: "This is auto generated date from mongodb"
+        updatedAt:
+          type: date-time
+          example: "2023-12-16T14:09:48.068+00:00"
+          description: "This is auto generated date from mongodb"
+
+    #................................health schema................................................
+    Health:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 4628625227824824
+          description: Unique identifier for the health record
+        user:
+          type: object
+          example:
+            $ref: "#/components/schemas/User"
+          descripiton: User who created this record
+        username:
+          type: string
+          example: example
+        doctorName:
+          type: string
+          example: doc. example
+        hospitalName:
+          type: string
+          example: city hospital
+        descripiton:
+          type: string
+          example: descripiton about the visit and other healht related things 
+        adharCardNumber:
+          type: string
+          example: 123451234512
+        phoneNumber:
+          type: string
+          example: 9843473434
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              filename:
+                type: string
+                example: "example.jpg"
+              url:
+                type: string
+                format: uri
+                example: "https://example.com/files/picture"
+        createdAt:
+          type: date-time
+          example: "2023-12-16T14:09:48.068+00:00"
+          description: "This is auto generated date from mongodb, this can be used for patient visit date"
         updatedAt:
           type: date-time
           example: "2023-12-16T14:09:48.068+00:00"

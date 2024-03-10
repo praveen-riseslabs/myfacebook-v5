@@ -1,7 +1,7 @@
 import swaggerJSDoc from "swagger-jsdoc";
 
-const port = process.env.PORT
-const baseUrl = `http://localhost:${port}`
+const port = process.env.PORT;
+const baseUrl = `http://localhost:${port}`;
 
 export const swaggerSpecs = swaggerJSDoc({
   definition: {
@@ -10,11 +10,17 @@ export const swaggerSpecs = swaggerJSDoc({
       title: "My Facebook App V1",
       version: "1.0.0",
     },
-    tags:[
-      {name: "User", description: "Operations related to user"},
-      {name: "Document", description: "Operations related to myDocuments"},
+    tags: [
+      { name: "User", description: "Operations related to user" },
+      { name: "Document", description: "Operations related to myDocuments" },
+      { name: "Health", description: "Operations related to myHealth" },
     ],
     servers: [{ url: `${baseUrl}/api/v1` }],
   },
-  apis: ["./swagger/schemas.yml", "./swagger/user.yml", "./swagger/document.yml"],
+  apis: [
+    "./swagger/schemas.yml",
+    "./swagger/user.yml",
+    "./swagger/document.yml",
+    "./swagger/health.yml",
+  ],
 });

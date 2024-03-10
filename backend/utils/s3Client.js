@@ -8,7 +8,8 @@ const bucketRegion = process.env.BUCKET_REGION;
 const accessKey = process.env.ACCESS_KEY;
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const urlExpiry = process.env.SIGNED_URL_EXPIRATION_VALUE;
-export const s3BaseFolder = "myDocuments";
+export const s3DocumentBaseFolder = "myDocuments";
+export const s3HealthBaseFolder = "myHealth";
 
 //initializing s3 client
 export const s3 = new S3Client({
@@ -20,8 +21,8 @@ export const s3 = new S3Client({
 });
 
 // creating random file names
-export const getFilename = (id, file, subCategory) =>
-  s3BaseFolder +
+export const getFilename = (baseFolder, id, file, subCategory) =>
+  baseFolder +
   "/" +
   id +
   "/" +
@@ -30,7 +31,6 @@ export const getFilename = (id, file, subCategory) =>
   getRandomString() +
   "_" +
   file.originalname;
-
 
 //singing url
 export const signedUrl = async (command) => {

@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const HealthRecords = () => {
   const [records, setRecords] = useState([
     // Initial health record data (you can populate this array with your data structure)
     { date: '2023-12-15',
-     description: 'Health checkup report',
-      fileUrl: 'path/to/file.pdf',
-    userName: 'John Doe',
+    description: 'Health checkup report',
+    fileUrl: 'path/to/file.pdf',
+    username: 'John Doe',
     doctorName: 'Dr. Rahul',
     hospitalName: 'Paras Hospital',
     visitDate: '2023-12-15',
@@ -18,35 +19,59 @@ const HealthRecords = () => {
   ]);
 
   const [formData, setFormData] = useState({
-    userName: '',
+    username: '',
     doctorName: '',
     hospitalName: '',
     visitDate: '',
     adharCardNumber: '',
     phoneNumber: '',
-    description: ''
+    description: '',
+    files: []
   })
 
+
+ useEffect(() => {
+  // Fetch data from API when the component mounts
+ fetchData()
+ }, []);
+
+ const fetchData = async () =>{
+  try {
+    const response =await axios.get("http://localhost:4000/api/v1/health/");
+ setRecords(response.data)  
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+ }
   // Function to handle health record uploads
   const handleChange =(e) =>{
     setFormData({ ...formData, [e.target.name]: e.target.value});
+
   };
-  const handleUpload = (e) => {
+  const handleUpload =async (e) => {
     e.preventDefault();
     // Logic to handle health record uploads
-    // This function will handle the file upload and update the records state
-    const newRecord = { ...formData };
-    setRecords([...records, newRecord]);
-    // Clear form fields after submission
-    setFormData({
-      userName: '',
-      doctorName: '',
-      hospitalName: '',
-      visitDate: '',
-      adharCardNumber: '',
-      phoneNumber: '',
-      description: ''
-    });
+    console.log(formData);
+    try {
+     const tok =  localStorage.getItem("token");
+      
+      await axios.post("http://localhost:4000/api/v1/health/new" ,formData, {headers:{Authorization: "Bearer " + tok}})
+       // If successful, update state and clear form fields
+       setRecords([...records, formData]);
+       setFormData({
+         username: '',
+         doctorName: '',
+         hospitalName: '',
+         visitDate: '',
+         adharCardNumber: '',
+         phoneNumber: '',
+         description: '',
+         files:[]
+       });
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  
   };
 
   return (
@@ -56,13 +81,13 @@ const HealthRecords = () => {
       {/* Form for uploading health records */}
       <form className="row g-3" onSubmit={handleUpload}>
         <div className="col-md-6">
-          <label htmlFor="userName" className="form-label">User Name</label>
+          <label htmlFor="username" className="form-label">User Name</label>
           <input 
             type="text" 
             className="form-control" 
-            id="userName" 
-            name="userName" 
-            value={formData.userName} 
+            id="username" 
+            name="username" 
+            value={formData.username} 
             onChange={handleChange} 
             required 
           />
@@ -140,7 +165,12 @@ const HealthRecords = () => {
           ></textarea>
         </div>
         <div className="col-12">
-        <input type="file" accept=".pdf, .doc, .docx" />
+        <input type="file" accept=".pdf, .doc, .docx" 
+        className="form-control"
+        name='files'
+        value={formData.files}
+        onChange={handleChange}
+        />
           <button type="submit" className="btn btn-primary">Upload</button>
         </div>
 
@@ -155,7 +185,7 @@ const HealthRecords = () => {
             <div className="card-body">
               <h5 className="card-title">Date: {record.date}</h5>
               <p className="card-text">Description: {record.description}</p>
-              <p className="card-text">User Name: {record.userName}</p>
+              <p className="card-text">User Name: {record.username}</p>
               <p className="card-text">Doctor Name: {record.doctorName}</p>
               <p className="card-text">Hospital Name: {record.hospitalName}</p>
               <p className="card-text">Visit Date: {record.visitDate}</p>

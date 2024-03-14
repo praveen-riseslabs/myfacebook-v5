@@ -4,7 +4,7 @@ import { userModel } from "../models/userModel.js";
 async function requireAuth(req, res, next) {
   try {
     const { authorization } = req.headers;
-    console.log(authorization);
+    
     if (!authorization || !authorization.startsWith("Bearer")) {
       throw new Error("Not authorized");
     }

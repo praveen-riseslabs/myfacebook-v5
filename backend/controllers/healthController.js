@@ -40,7 +40,7 @@ class HealthController {
 
       //creating filenames
       const filenames = files.map((file) =>
-        getFilename(s3HealthBaseFolder, user._id, file, belongTo)
+        getFilename(s3HealthBaseFolder, user._id, file, hospitalName)
       );
 
       //   creating new object and saving it to s3 bucket
